@@ -1,0 +1,13 @@
+environments:
+  default:
+    secrets:
+      - secrets1.enc.yaml
+---
+releases:
+  - name: demo
+    namespace: default
+    chart: ./demo
+    secrets:
+      - secrets2.enc.yaml
+    values:
+      - some_secret_value: "{{.Values.some_secret_value}}"

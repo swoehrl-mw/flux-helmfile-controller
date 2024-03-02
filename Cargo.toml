@@ -1,0 +1,55 @@
+[package]
+name = "flux-helmfile-controller"
+version = "0.1.0"
+edition = "2021"
+default-run = "controller"
+
+[[bin]]
+name = "controller"
+path = "src/main.rs"
+
+[[bin]]
+name = "devhelper"
+path = "src/devhelper.rs"
+
+
+[dependencies]
+kube = {version = "0.88.1", default-features=false, features = ["client", "derive", "admission", "runtime", "rustls-tls", "unstable-runtime"]}
+k8s-openapi = { version = "0.21.0", default-features = false, features = ["v1_28"] }
+schemars = "0.8.16"
+serde = "1.0.196"
+serde_derive = "1.0.196"
+serde_json = "1.0.113"
+serde_yaml = "0.9.31"
+tokio = { version = "1.36.0", features = ["rt-multi-thread", "macros", "process"]}
+futures = "0.3.30"
+argh = "0.1.12"
+thiserror = "1.0.56"
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", default-features = false, features = ["fmt", "json", "std", "registry", "env-filter"] }
+chrono = "0.4.33"
+axum = { version = "0.7.4" }
+prometheus-client = "0.22.1"
+lazy_static = "1.4.0"
+reqwest = { version = "0.11.24", default-features = false }
+tar = "0.4.40"
+bytes = "1.5.0"
+flate2 = "1.0.28"
+url = "2.5.0"
+parse_duration = "2.1.1"
+tempfile = "3.9.0"
+async-trait = "0.1.77"
+
+[dev-dependencies]
+mockall = "0.12.1"
+
+
+[profile.min]
+inherits = "release"
+# By default, Cargo instructs compilation units to be compiled and optimized in isolation. LTO instructs the linker to optimize at the link stage. This can, for example, remove dead code and often times reduces binary size.
+lto = true
+opt-level = 'z'  # Optimize for size.
+# By default, Cargo specifies 16 parallel codegen units for release builds. This improves compile times, but prevents some optimizations.
+codegen-units = 1
+panic = 'abort'
+strip = true

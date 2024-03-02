@@ -1,0 +1,28 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: demo
+  namespace: default
+spec:
+  interval: 5m0s
+  url: https://github.com/swoehrl-mw/flux-helmfile-controller.git
+  ref:
+    branch: main
+---
+apiVersion: flux.maibornwolff.de/v1alpha1
+kind: Helmfile
+metadata:
+  name: demo
+  namespace: default
+spec:
+  interval: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: demo
+  path: demo
+  options:
+    timeout: 1m
+  decryption:
+    provider: sops-age
+    secretRef:
+      name: sops-age-key

@@ -1,0 +1,32 @@
+name: test
+on: [pull_request]
+
+
+jobs:
+  unittests:
+    name: Run unittests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Install rust stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: "1.76.0"
+            override: true
+            components: clippy
+
+      - name: Compile code
+        run: |
+          cargo build
+
+      - name: Run unit tests
+        run: |
+          set -e
+          cargo test
+
+      - name: Check clippy
+        run: |
+          set -e
+          cargo clippy -- -D warnings # Fail on any warnings
